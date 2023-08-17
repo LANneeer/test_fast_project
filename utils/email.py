@@ -8,7 +8,9 @@ from fastapi_mail import (
 )
 from pydantic import BaseModel, EmailStr
 from starlette.responses import JSONResponse
+from dotenv import load_dotenv
 
+load_dotenv()
 
 email_conf = ConnectionConfig(
     MAIL_USERNAME=os.getenv("MAIL_USERNAME"),
@@ -34,7 +36,7 @@ class EmailService:
     async def send_mail(self, email: EmailSchema, message: str):
         message = MessageSchema(
             subject="Test Task email",
-            recipients=email,
+            recipients=[email.dict().get("email")],
             body=message,
             subtype=MessageType.html
         )
